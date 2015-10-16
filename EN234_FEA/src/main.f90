@@ -13,10 +13,10 @@ program en234fea
 !  outfil = './Output_files/linear_elastic_3d.out'
 !  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
-  infil = './input_files/linear_elastic_2d.in'
-  open (unit = IOR, file = infil, status = 'old', ERR=500)
-  outfil = './Output_files/linear_elastic_2d.out'
-  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+!  infil = './input_files/linear_elastic_2d.in'
+!  open (unit = IOR, file = infil, status = 'old', ERR=500)
+!  outfil = './Output_files/linear_elastic_2d.out'
+!  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
 
 !  infil = './input_files/linear_elastic_3d_dynamic.in'
@@ -60,10 +60,10 @@ program en234fea
 
 !
 !  Homework 4, crack tip elements and the J integral
-!  infil = './input_files/crack_tri6.in'
-!  open (unit = IOR, file = infil, status = 'old', ERR=500)
-!  outfil = './Output_files/crack_tri6.out'
-!  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+  infil = './input_files/crack_tri6.in'
+  open (unit = IOR, file = infil, status = 'old', ERR=500)
+  outfil = './Output_files/crack_tri6.out'
+  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
 !  Homework 5, small-strain B bar element - test with same files as in HW3, but
 !  try approaching incompressible limit by making Poisson's ratio close to 0.5
