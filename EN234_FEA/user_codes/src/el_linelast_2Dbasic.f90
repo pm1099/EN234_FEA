@@ -354,30 +354,35 @@ subroutine el_linelast_2d_Bbar(lmn, element_identifier, n_nodes, node_property_l
     D(2,2) = d11
     D(3,3) = d33
 
-    !     --  Loop over integration points
-    do kint = 1, n_points
-        call calculate_shapefunctions(xi(1:2,kint),n_nodes,N,dNdxi)
+  ! Finding dNbardx
+       do m=1,n_points
+       call calculate_shapefunctions(xi(1:2,m),n_nodes,N,dNdxi)
         dxdxi = matmul(x(1:2,1:n_nodes),dNdxi(1:n_nodes,1:2))
         call invert_small(dxdxi,dxidx,determinant)
-        dNdx(1:n_nodes,1:2) = matmul(dNdxi(1:n_nodes,1:2),dxidx)
-
-       ! Finding dNbardx
-       do m=1,n_points
-       el_vol=0.d0
-       dNbardx=0.d0
+        dNdx(1:n_nodes,1:2) = matmul(dNdxi,dxidx(1:2,1:2))
+        el_vol=0.d0
+        dNbardx=0.d0
         do a=1,n_nodes
             do i=1,2
                 dNbardx(a,i)=dNbardx(a,i)+dNdx(a,i)*w(m)*determinant-dNdx(a,i)
             end do
         end do
         el_vol=el_vol+w(m)*determinant
-       end do
+        end do
 
         do a=1,n_nodes
             do i=1,2
                 dNbardx(a,i)=dNbardx(a,i)/el_vol
             end do
         end do
+
+
+    !     --  Loop over integration points
+    do kint = 1, n_points
+        call calculate_shapefunctions(xi(1:2,kint),n_nodes,N,dNdxi)
+        dxdxi = matmul(x(1:2,1:n_nodes),dNdxi(1:n_nodes,1:2))
+        call invert_small(dxdxi,dxidx,determinant)
+        dNdx(1:n_nodes,1:2) = matmul(dNdxi(1:n_nodes,1:2),dxidx)
 
         B = 0.d0
         Bbar=0.d0
@@ -508,16 +513,12 @@ subroutine fieldvars_linelast_2d_Bbar(lmn, element_identifier, n_nodes, node_pro
     D(2,2) = d11
     D(3,3) = d33
 
-
-    !     --  Loop over integration points
-    do kint = 1, n_points
-        call calculate_shapefunctions(xi(1:2,kint),n_nodes,N,dNdxi)
+! Finding dNbardx
+       do m=1,n_points
+       call calculate_shapefunctions(xi(1:2,m),n_nodes,N,dNdxi)
         dxdxi = matmul(x(1:2,1:n_nodes),dNdxi(1:n_nodes,1:2))
         call invert_small(dxdxi,dxidx,determinant)
         dNdx(1:n_nodes,1:2) = matmul(dNdxi,dxidx(1:2,1:2))
-
-       ! Finding dNbardx
-       do m=1,n_points
         el_vol=0.d0
         dNbardx=0.d0
         do a=1,n_nodes
@@ -534,6 +535,14 @@ subroutine fieldvars_linelast_2d_Bbar(lmn, element_identifier, n_nodes, node_pro
             end do
         end do
 
+    !     --  Loop over integration points
+    do kint = 1, n_points
+        call calculate_shapefunctions(xi(1:2,kint),n_nodes,N,dNdxi)
+        dxdxi = matmul(x(1:2,1:n_nodes),dNdxi(1:n_nodes,1:2))
+        call invert_small(dxdxi,dxidx,determinant)
+        dNdx(1:n_nodes,1:2) = matmul(dNdxi,dxidx(1:2,1:2))
+
+
         B = 0.d0
         Bbar=0.d0
         Bcorr=0.d0
@@ -542,8 +551,6 @@ subroutine fieldvars_linelast_2d_Bbar(lmn, element_identifier, n_nodes, node_pro
         B(2,2:2*n_nodes:2) = dNdx(1:n_nodes,2)
         B(3,1:2*n_nodes-1:2) = dNdx(1:n_nodes,2)
         B(3,2:2*n_nodes:2)   = dNdx(1:n_nodes,1)
-
-
 
       dNdx_vec=reshape(transpose(dNdx),(/1,2*n_nodes/))
        dNbardx_vec=reshape(transpose(dNbardx(1:n_nodes,1:2)),(/1,2*n_nodes/))
