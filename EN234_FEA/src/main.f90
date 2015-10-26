@@ -60,10 +60,10 @@ program en234fea
 !  open (unit = IOR, file = infil, status = 'old', ERR=500)
 !  outfil = './Output_files/holeplate_2d_quad8.out'
 !  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
- infil = './input_files/holeplate_3d_Bbar.in'
- open (unit = IOR, file = infil, status = 'old', ERR=500)
- outfil = './Output_files/holeplate_3d_Bbar.out'
- open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+! infil = './input_files/holeplate_3d_Bbar.in'
+! open (unit = IOR, file = infil, status = 'old', ERR=500)
+! outfil = './Output_files/holeplate_3d_Bbar.out'
+! open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 ! infil = './input_files/holeplate_3d.in'
 ! open (unit = IOR, file = infil, status = 'old', ERR=500)
 ! outfil = './Output_files/holeplate_3d.out'
@@ -80,6 +80,12 @@ program en234fea
 !  Homework 5, small-strain B bar element - test with same files as in HW3, but
 !  try approaching incompressible limit by making Poisson's ratio close to 0.5
 
+!
+! Homework 6: Hypoelastic Material: Test element
+  infil = './input_files/hypoelastic_3D.in'
+  open (unit = IOR, file = infil, status = 'old', ERR=500)
+  outfil = './Output_files/hypoelastic_3D.out'
+  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 !
 ! Homework 6: small-strain Armstrong-Frederick kinematic hardening model
 !  infil = './input_files/cyclic_plastic_3d.in'
