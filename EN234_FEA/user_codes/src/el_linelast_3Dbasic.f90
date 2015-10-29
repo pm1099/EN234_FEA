@@ -165,14 +165,14 @@ subroutine el_linelast_3dbasic(lmn, element_identifier, n_nodes, node_property_l
 
             ! Finding Bcorr matrix
             Bcorr=0.d0
-            Bcorr(1,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(1,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
-            Bcorr(1,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
-            Bcorr(2,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(2,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
-            Bcorr(2,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
-            Bcorr(3,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(3,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(1,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(1,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(1,3:3*n_nodes:3)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
+            Bcorr(2,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(2,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(2,3:3*n_nodes:3)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
+            Bcorr(3,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(3,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
             Bcorr(3,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
 
             ! Find Bbar matrix
@@ -506,15 +506,15 @@ subroutine fieldvars_linelast_3dbasic(lmn, element_identifier, n_nodes, node_pro
 
             ! Finding Bcorr matrix
             Bcorr=0.d0
-            Bcorr(1,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(1,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
-            Bcorr(1,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
-            Bcorr(2,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(2,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
-            Bcorr(2,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
-            Bcorr(3,1:3*n_nodes-2:2)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
-            Bcorr(3,2:3*n_nodes-1:2)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
-            Bcorr(3,3:3*n_nodes:2)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
+            Bcorr(1,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(1,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(1,3:3*n_nodes:3)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
+            Bcorr(2,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(2,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(2,3:3*n_nodes:3)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
+            Bcorr(3,1:3*n_nodes-2:3)=dNbardx(1:n_nodes,1)-dNdx(1:n_nodes,1)
+            Bcorr(3,2:3*n_nodes-1:3)=dNbardx(1:n_nodes,2)-dNdx(1:n_nodes,2)
+            Bcorr(3,3:3*n_nodes:3)=dNbardx(1:n_nodes,3)-dNdx(1:n_nodes,3)
 
             ! Find Bbar matrix
             Bbar=0.d0

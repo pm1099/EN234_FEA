@@ -331,7 +331,6 @@ subroutine print_state
 
 
         ! Print solution to a file that may be read by TECPLOT
-
     if (n_field_variables>0) then
         allocate(field_variables(n_field_variables,n_nodes), stat = status)
         allocate(auxiliary_field_variables(n_field_variables), stat=status)
@@ -354,7 +353,7 @@ subroutine print_state
     do izstart = 1,n_zones
         if (zone_print_flag(izstart)) exit
     end do
-                        
+
     if (zone_dimension(izstart)==2) then
         tecplotstring = 'VARIABLES = X,Y'
     else if (zone_dimension(izstart)==3) then
@@ -380,20 +379,19 @@ subroutine print_state
             tecplotstring = trim(tecplotstring)//','//trim(dofstring)
         enddo
     endif
-  
     if (n_field_variables>0) then
         do i = 1,n_field_variables
             tecplotstring = trim(tecplotstring)//','//trim(field_variable_names(i))
         end do
     end if
   
-  
     ! If all zones are printed together, count all the printable elements and assign numbers to all printable nodes
     node_numbers = 0
     n_printable_nodes = 0
     n_auxiliary_nodes = 0
     n_printable_elements = 0
-    if (combinezones) then
+
+     if (combinezones) then
         do iz = izstart,n_zones
             if (.not.zone_print_flag(iz)) cycle
             node_numbers = 0                      ! Reset node numbers for each zone
@@ -421,7 +419,7 @@ subroutine print_state
                 end do
             end do
         end do
-    
+
         write(state_print_unit,*) trim(tecplotstring)
         if (zone_dimension(izstart)==2) then
             write (state_print_unit,'(A10,D10.4,A15,I5,A3,I5,A9)') ' ZONE, T="',TIME+DTIME,&

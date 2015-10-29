@@ -135,7 +135,7 @@ program en234fea
       call compute_static_step
       if (checkstiffness) call check_stiffness(checkstiffness_elementno)
   endif
-  
+
   if (explicitdynamicstep) call explicit_dynamic_step
   
   write(6,*) ' Program completed successfully '

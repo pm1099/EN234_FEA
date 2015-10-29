@@ -53,7 +53,7 @@ subroutine compute_static_step
             call apply_direct_boundaryconditions
             call solve_direct
             converged = .true.
-         
+
             if (nonlinear) then                          ! Nonlinear problem - activate Newton iterations
                 do iteration = 1,max_newton_iterations
                     call assemble_direct_stiffness(fail)
@@ -68,13 +68,13 @@ subroutine compute_static_step
 
             call compute_static_time_increment(iteration,converged,continue_timesteps, &
                 activatestateprint,activateuserprint,new_time_increment)
-         
+
             if (.not.converged) then
                 dof_increment = 0.d0
                 DTIME = new_time_increment
                 cycle
             endif
-         
+
             if (activatestateprint)  call print_state
             if (activateuserprint) call user_print(current_step_number)
 

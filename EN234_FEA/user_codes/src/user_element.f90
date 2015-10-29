@@ -234,7 +234,7 @@ subroutine user_element_fieldvariables(lmn, element_identifier, n_nodes, node_pr
          nodal_fieldvariables)      ! Output variables
 
     else if ( element_identifier == 1003) then              ! Hypoelastic Material
-        call el_hypoelast_3D(lmn, element_identifier, n_nodes, node_property_list, &         ! Input variables
+        call fieldvars_hypoelast_3D(lmn, element_identifier, n_nodes, node_property_list, &         ! Input variables
          n_properties, element_properties,element_coords, length_coord_array,  &                     ! Input variables
          dof_increment, dof_total, length_dof_array,  &                                              ! Input variables
          n_state_variables, initial_state_variables,updated_state_variables, &                       ! Input variables
