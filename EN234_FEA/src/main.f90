@@ -82,10 +82,10 @@ program en234fea
 
 !
 ! Homework 6: Hypoelastic Material: Test element
-  infil = './input_files/hypoelastic_3D.in'
-  open (unit = IOR, file = infil, status = 'old', ERR=500)
-  outfil = './Output_files/hypoelastic_3D.out'
-  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+!  infil = './input_files/hypoelastic_3D.in'
+!  open (unit = IOR, file = infil, status = 'old', ERR=500)
+!  outfil = './Output_files/hypoelastic_3D.out'
+!  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 !
 ! Homework 6: small-strain Armstrong-Frederick kinematic hardening model
 !  infil = './input_files/cyclic_plastic_3d.in'
@@ -106,10 +106,10 @@ program en234fea
 !  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 !
 ! Homework 7, stretch a hyperelastic plate with a central hole
-!  infil = './input_files/Holeplate_hyperelastic.in'
-!  open (unit = IOR, file = infil, status = 'old', ERR=500)
-!  outfil = './Output_files/Holeplate_hyperelastic.out'
-!  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+  infil = './input_files/Holeplate_hyperelastic.in'
+  open (unit = IOR, file = infil, status = 'old', ERR=500)
+  outfil = './Output_files/Holeplate_hyperelastic.out'
+  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
 
 !!  Homework 8, solve the 2D Cahn-Hilliard equation
