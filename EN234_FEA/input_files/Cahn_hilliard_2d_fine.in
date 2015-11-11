@@ -4660,7 +4660,7 @@
 %       Define element properties - the values are passed to user subroutine elstif in the order they are listed here
 %       For the example provided, the params are diffusion coefficient, kappa, theta
         PROPERTIES
-         1.d0, 0.0001d0, 0.5d0
+         1.0d0, 0.0001d0, 0.5d0
         END PROPERTIES
 %     Define mass density (for explicity dynamics only)
 %       DENSITY, 10.d0
@@ -9177,8 +9177,8 @@
 
 %   The CHECK STIFFNESS key tests the element subroutine to ensure that
 %   the residual force vector is consistent with the stiffness
-%       CHECK STIFFNESS, 600
-%       STOP
+%      CHECK STIFFNESS, 600
+%      STOP
 
 
 
@@ -9192,7 +9192,7 @@
           INITIAL TIME STEP, 1.d-03    
           MAX TIME STEP, 1.d-03
           MIN TIME STEP, 1.d-05
-          MAX NUMBER OF STEPS, 50
+          MAX NUMBER OF STEPS, 100
           STOP TIME, 10.d0
           STATE PRINT STEP INTERVAL, 1
           USER PRINT STEP INTERVAL, 100
