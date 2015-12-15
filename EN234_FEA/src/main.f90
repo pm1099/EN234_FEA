@@ -120,18 +120,24 @@ program en234fea
 
 
 !!  Homework 9, Dynamic fracture with explicit dynamics, finite strain Gurson model.
-  infil = './input_files/Gurson_3d_dynamic.in'
-  open (unit = IOR, file = infil, status = 'old', ERR=500)
-  outfil = './Output_files/Gurson_3d_dynamic.out'
-  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+!  infil = './input_files/Gurson_3d_dynamic.in'
+! open (unit = IOR, file = infil, status = 'old', ERR=500)
+!  outfil = './Output_files/Gurson_3d_dynamic.out'
+! open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
 !  infil = './input_files/notch_fracture_dynamic.in'
 !  open (unit = IOR, file = infil, status = 'old', ERR=500)
-! outfil = './Output_files/notch_fracture_dynamic.out'
+!  outfil = './Output_files/notch_fracture_dynamic.out'
 !  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
 
+! Project. Single element elastic-viscoplastic explicit dynamics for pressure shear
+  infil = './input_files/PressureShear_3D.in'
+  open (unit = IOR, file = infil, status = 'old', ERR=500)
+  outfil = './Output_files/PressureShear_3D.out'
+  open (UNIT = IOW, FILE = outfil, STATUS = 'unknown', ERR=500)
+
   call read_input_file
-  
+
    if (printinitialmesh) call print_initial_mesh
 
   if (checkstiffness) call check_stiffness(checkstiffness_elementno)
@@ -142,7 +148,7 @@ program en234fea
   endif
 
   if (explicitdynamicstep) call explicit_dynamic_step
-  
+
   write(6,*) ' Program completed successfully '
 
   stop

@@ -10,7 +10,7 @@ subroutine el_linelast_3dbasic(lmn, element_identifier, n_nodes, node_property_l
     updated_state_variables,element_stiffness,element_residual, fail)      ! Output variables                          ! Output variables
     use Types
     use ParamIO
-    !  use Globals, only: TIME,DTIME  For a time dependent problem uncomment this line to access the time increment and total time
+    use Globals, only: TIME,DTIME  !For a time dependent problem uncomment this line to access the time increment and total time
     use Mesh, only : node
     use Element_Utilities, only : N => shape_functions_3D
     use Element_Utilities, only : dNdxi => shape_function_derivatives_3D
@@ -66,8 +66,8 @@ subroutine el_linelast_3dbasic(lmn, element_identifier, n_nodes, node_property_l
     real (prec)  ::  Bbar(6,length_dof_array)          ! Bbar=B+(1/3)*Bcorr
     real (prec)  ::  dxidx(3,3), determinant           ! Jacobian inverse and determinant
     real (prec)  ::  x(3,length_coord_array/3)         ! Re-shaped coordinate array x(i,a) is ith coord of ath node
-    real (prec)  :: E, xnu, D44, D11, D12              ! Material properties
-    real (prec)  :: el_vol              ! Element Volume
+    real (prec)  ::  E, xnu, D44, D11, D12              ! Material properties
+    real (prec)  ::  el_vol              ! Element Volume
     !     Subroutine to compute element stiffness matrix and residual force vector for 3D linear elastic elements
     !     El props are:
 
@@ -557,3 +557,139 @@ subroutine fieldvars_linelast_3dbasic(lmn, element_identifier, n_nodes, node_pro
     endif
     return
 end subroutine fieldvars_linelast_3dbasic
+
+! UMAT for 3D small strain viscoplasticity.
+
+SUBROUTINE usermat_viscoplastic(STRESS,STATEV,DDSDDE,STRAN,DSTRAN,&
+            PROPS,NPROPS,USTATV)
+
+     use Types
+     use ParamIO
+     use Globals, only: TIME,DTIME
+     use Mesh, only : node
+
+     implicit none
+
+     integer, intent (in)   ::  NPROPS        !7 for 3D viscoplastic
+
+     real (prec), intent (in)        :: STRAN(6), DSTRAN(6)
+     real (prec), intent (in)        :: PROPS(NPROPS)
+     real (prec), intent (inout)     :: STATEV(1)
+
+     real (prec), intent (out)  ::  STRESS(6), DDSDDE(6,6), USTATV(1)
+
+     ! Local variables
+
+     integer k,NIT,MAXIT,i,j                                ! Integers
+     integer n,m                                            ! Integer material properties
+
+     real(prec):: E,xnu,Y,xe,edot                   ! Material Properties
+     real(prec):: EP                                ! State variables: Plastic strain
+     real(prec):: AONE(6,6), ATWO(6,6)              ! AONE=dik*djl+djk*il, ATWO=dij*dkl
+     real(prec):: DDEVST(6), DEVS(6)        ! Deviatoric strain increment and stress
+     real(prec):: DEVSS(6), SES                 ! Elastic Predictors
+     real(prec):: ERROR,TOL                           ! Tolerance on Newton-Raphson loop
+     real(prec):: DEP,T,F,DFDE                          ! N-R loop terms
+     real(prec):: BETA,GAMMAA, FACTOR                    ! GAMMAA
+     real(prec):: ATHREE(6,6)                       ! =Sij*Skl
+
+
+    ! Material Properties
+    E = props(1)
+    xnu = props(2)
+    Y = props(3)
+    xe = props(4)
+    n = props(5)
+    edot = props(6)
+    m = props(7)
+
+    ! State variables
+    EP = STATEV(1)           ! Plane strain at nth time
+
+
+    ! Define AONE and ATWO matrices
+    AONE = 0.d0
+    ATWO = 0.d0
+    do k=1,3
+        AONE(k,k) = 2.d0
+        ATWO(k,1:3) = 1.d0
+    end do
+    do k=4,6
+        AONE(k,k) = 1.d0
+    end do
+
+    ! Initialize required matrices
+    DDSDDE = 0.d0
+
+    ! N-R Loop parameters
+    ERROR = Y
+    TOL=(10.d0**(-6))*Y
+    MAXIT=30
+
+    ! Deviatoric strain increment and deviatoric stress.
+    DDEVST(1:6)= DSTRAN(1:6)-(/1.d0,1.d0,1.d0,0.d0,0.d0,0.d0/)/3.d0
+    DEVS = STRESS-(STRESS(1)+STRESS(2)+STRESS(3))*(/1.d0,1.d0,1.d0,0.d0,0.d0,0.d0/)/3.d0
+
+    ! Elastic predictors
+    DEVSS = DEVS + ( E/(1+xnu) )*DDEVST
+    SES = sqrt( 1.5d0* ( (DEVSS(1)**2) + (DEVSS(2)**2) + (DEVSS(3)**2) + &
+        (DEVSS(4)**2) + (DEVSS(5)**2) + (DEVSS(6)**2) ))
+
+    ! Newton-Raphson Loop. Solve for plastic strain increment.
+    DEP = 0.d0
+    if (SES*EDOT == 0)then
+        DEP = 0.d0
+    else
+        do while (ERROR > TOL .and. NIT < MAXIT)
+            T = Y*((1 +((EP+DEP)/xe))**(1/n))*((DEP/(DTIME*EDOT))**(1/m))
+            F = SES - T - 1.5d0*(E/(1+xnu))*DEP
+            DFDE = -1.5d0*(E/(1+xnu)) - T/(n*(xe+EP+DEP)) -T/(m*DEP)
+            DEP = DEP - F/DFDE
+
+            if (DEP<0) then
+                DEP = DEP/10.d0
+            end if
+
+            ERROR = abs(F)
+            NIT = NIT + 1
+        end do
+    end if
+
+    ! Update Stress
+    if (SES>0) then
+        BETA = 1-1.5d0*E*DEP/((1+xnu)*SES)
+    else
+        BETA = 1.d0
+    end if
+    STRESS = BETA*DEVSS +&
+    ((STRESS(1)+STRESS(2)+STRESS(3)) + &
+    E*(DSTRAN(1)+DSTRAN(2)+DSTRAN(3))/(1-2.d0*xnu))*(/1.d0,1.d0,1.d0,0.d0,0.d0,0.d0/)/3.d0
+
+    ! Tangent Stiffness
+    if (SES*DEP>0) then
+        BETA = 1-1.5d0*E*DEP/((1+xnu)*SES)
+        GAMMAA = (1-BETA) + BETA*((1/(n*(xe+EP+DEP))) + (1/(m*DEP)))
+        FACTOR = (E/(1+xnu))*(2.25*E*(DEP-1/GAMMAA)/((1+xnu)*(SES**3)))
+    else
+        BETA = 1.d0
+        FACTOR = 0.d0
+    end if
+
+    ! Tangent stiffness
+    ! Find Sij*Skl
+    ATHREE = 0.d0
+    do i=1,6
+        do j=1,6
+            ATHREE(i,j)=DEVSS(i)*DEVSS(j)
+        end do
+    end do
+    DDSDDE = (E/(1+xnu))*BETA*(0.5d0*AONE-(1/3.d0)*ATWO) + FACTOR*ATHREE + &
+    (E/(3.d0*(1-2.d0*xnu)))*ATWO
+
+    ! Update state variables
+    USTATV(1) = EP + DEP
+
+        return
+    end subroutine usermat_viscoplastic
+
+

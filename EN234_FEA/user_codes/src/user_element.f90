@@ -173,6 +173,13 @@ subroutine user_element_dynamic(lmn, element_identifier, n_nodes, node_property_
     n_state_variables, initial_state_variables, &                                                        ! Input variables
     updated_state_variables,element_residual,element_deleted)
 
+    else if (element_identifier==3002) then
+    call el_pressureshear_3D(lmn, element_identifier, n_nodes, node_property_list, &           ! Input variables
+    n_properties, element_properties,element_coords, length_coord_array, &                               ! Input variables
+    dof_increment, dof_total, length_dof_array,  &                                                       ! Input variables
+    n_state_variables, initial_state_variables, &                                                        ! Input variables
+    updated_state_variables,element_residual,element_deleted)                                            ! Output variables
+
     else
         write (IOW, 99001) element_identifier
         stop
@@ -273,6 +280,13 @@ call fieldvars_gurson_3D_dynamic(lmn, element_identifier, n_nodes, node_property
     n_field_variables,field_variable_names, &                                                           ! Field variable definition
     nodal_fieldvariables)      ! Output variables
 
+else if (element_identifier==3002) then
+call fieldvars_pressureshear_3D(lmn, element_identifier, n_nodes, node_property_list, &           ! Input variables
+    n_properties, element_properties,element_coords,length_coord_array, &                                ! Input variables
+    dof_increment, dof_total, length_dof_array,  &                                                      ! Input variables
+    n_state_variables, initial_state_variables,updated_state_variables, &                               ! Input variables
+    n_field_variables,field_variable_names, &                                                           ! Field variable definition
+    nodal_fieldvariables)      ! Output variables
         else
 
         write (IOW, 99001) element_identifier
